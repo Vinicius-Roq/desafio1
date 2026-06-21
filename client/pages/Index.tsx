@@ -4,73 +4,6 @@ import { Menu, X, ChevronDown, AlertCircle, Shield, CheckCircle, XCircle } from 
 export default function Index() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("inicio");
-  const [quizCompleted, setQuizCompleted] = useState(false);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [quizAnswers, setQuizAnswers] = useState<boolean[]>([]);
-  const [showQuizResult, setShowQuizResult] = useState(false);
-
-  const quizQuestions = [
-    {
-      question: "É permitido usar regata ou camiseta sem mangas nos estaleiros?",
-      correct: false,
-      explanation: "Não! O uso de regata é PROIBIDO. É obrigatório usar camisa ou blusa de manga comprida.",
-    },
-    {
-      question: "Posso entrar nos estaleiros usando shorts?",
-      correct: false,
-      explanation: "Não! Shorts são PROIBIDOS. É obrigatório usar calças compridas.",
-    },
-    {
-      question: "Sapatos abertos (chinelos, sandálias) são permitidos?",
-      correct: false,
-      explanation: "Não! Sapatos abertos são PROIBIDOS. É obrigatório usar botas de segurança ou sapatos fechados.",
-    },
-    {
-      question: "O capacete é obrigatório em todas as áreas dos estaleiros?",
-      correct: true,
-      explanation: "Sim! O uso de capacete é OBRIGATÓRIO em qualquer área dentro do estaleiro.",
-    },
-    {
-      question: "A Wilson Sons fornece os EPIs para os visitantes?",
-      correct: false,
-      explanation: "Não! Os visitantes DEVEM LEVAR seus próprios EPIs: capacete, botas de segurança e colete.",
-    },
-    {
-      question: "O colete de segurança é obrigatório durante toda a visita?",
-      correct: true,
-      explanation: "Sim! O colete é OBRIGATÓRIO para identificação e visibilidade em todas as áreas.",
-    },
-  ];
-
-  const handleQuizAnswer = (answer: boolean) => {
-    const newAnswers = [...quizAnswers, answer];
-    setQuizAnswers(newAnswers);
-
-    if (currentQuestionIndex < quizQuestions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      setShowQuizResult(true);
-    }
-  };
-
-  const isQuizPassed = quizAnswers.every(
-    (answer, idx) => answer === quizQuestions[idx].correct
-  );
-
-  const resetQuiz = () => {
-    setCurrentQuestionIndex(0);
-    setQuizAnswers([]);
-    setShowQuizResult(false);
-  };
-
-  const handleQuizComplete = () => {
-    if (isQuizPassed) {
-      setQuizCompleted(true);
-      scrollToSection("inscricao");
-    } else {
-      resetQuiz();
-    }
-  };
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -102,7 +35,6 @@ export default function Index() {
               { id: "sobre", label: "Sobre" },
               { id: "programacao", label: "Programação" },
               { id: "epis", label: "EPIs" },
-              { id: "quiz", label: "Quiz" },
               { id: "inscricao", label: "Inscrição" },
               { id: "contato", label: "Contato" },
             ].map((item) => (
@@ -147,7 +79,6 @@ export default function Index() {
               { id: "sobre", label: "Sobre" },
               { id: "programacao", label: "Programação" },
               { id: "epis", label: "EPIs" },
-              { id: "quiz", label: "Quiz" },
               { id: "inscricao", label: "Inscrição" },
               { id: "contato", label: "Contato" },
             ].map((item) => (
@@ -492,113 +423,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Quiz de Segurança */}
-      <section id="quiz" className="py-20 px-4 bg-gradient-to-b from-blue-50 to-blue-100">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 text-center">
-            Quiz de Segurança Obrigatório
-          </h2>
-          <p className="text-gray-600 text-center mb-12 text-lg">
-            Para garantir que todos os visitantes entendem os requisitos de segurança, é necessário responder corretamente este quiz. Ele é obrigatório para a inscrição.
-          </p>
-
-          {!showQuizResult ? (
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              <div className="mb-6">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-sm font-semibold text-blue-600">
-                    Pergunta {currentQuestionIndex + 1} de {quizQuestions.length}
-                  </span>
-                  <div className="w-full bg-gray-200 rounded-full h-2 ml-4 flex-1">
-                    <div
-                      className="bg-blue-600 h-2 rounded-full transition-all"
-                      style={{
-                        width: `${((currentQuestionIndex + 1) / quizQuestions.length) * 100}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <h3 className="text-xl font-bold text-gray-900 mb-8">
-                {quizQuestions[currentQuestionIndex].question}
-              </h3>
-
-              <div className="space-y-4">
-                <button
-                  onClick={() => handleQuizAnswer(true)}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg transition-all text-lg"
-                >
-                  ✓ Verdadeiro
-                </button>
-                <button
-                  onClick={() => handleQuizAnswer(false)}
-                  className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-6 rounded-lg transition-all text-lg"
-                >
-                  ✗ Falso
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-white rounded-xl shadow-lg p-8">
-              {isQuizPassed ? (
-                <div className="text-center">
-                  <CheckCircle className="w-20 h-20 text-green-600 mx-auto mb-6" />
-                  <h3 className="text-3xl font-bold text-green-600 mb-4">
-                    Parabéns!
-                  </h3>
-                  <p className="text-gray-600 text-lg mb-6">
-                    Você respondeu corretamente todas as perguntas sobre segurança. Agora você pode prosseguir com a inscrição.
-                  </p>
-                  <button
-                    onClick={handleQuizComplete}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all text-lg"
-                  >
-                    Prosseguir para Inscrição
-                  </button>
-                </div>
-              ) : (
-                <div className="text-center">
-                  <XCircle className="w-20 h-20 text-red-600 mx-auto mb-6" />
-                  <h3 className="text-3xl font-bold text-red-600 mb-4">
-                    Resposta Incorreta
-                  </h3>
-                  <p className="text-gray-600 text-lg mb-8">
-                    Você não respondeu todas as perguntas corretamente. Por favor, revise as normas de segurança e tente novamente.
-                  </p>
-                  <div className="space-y-4 mb-8 max-h-96 overflow-y-auto">
-                    {quizQuestions.map((q, idx) => (
-                      <div
-                        key={idx}
-                        className={`text-left p-4 rounded-lg ${
-                          quizAnswers[idx] === q.correct
-                            ? "bg-green-100 border-l-4 border-green-600"
-                            : "bg-red-100 border-l-4 border-red-600"
-                        }`}
-                      >
-                        <h4 className="font-bold mb-2">{q.question}</h4>
-                        <p className="text-sm text-gray-700 mb-2">
-                          Sua resposta: <span className="font-semibold">{quizAnswers[idx] ? "Verdadeiro" : "Falso"}</span>
-                        </p>
-                        <p className="text-sm font-semibold text-gray-800">
-                          {q.explanation}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={resetQuiz}
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all text-lg"
-                  >
-                    Tentar Novamente
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </section>
-
       {/* Inscrição Section */}
       <section id="inscricao" className="py-20 px-4 bg-white">
         <div className="max-w-4xl mx-auto">
@@ -606,56 +430,24 @@ export default function Index() {
             Inscrição
           </h2>
 
-          {!quizCompleted ? (
-            <div className="bg-yellow-100 border-l-4 border-yellow-600 rounded-lg p-8 text-center">
-              <AlertCircle className="w-12 h-12 text-yellow-600 mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-yellow-900 mb-4">
-                Quiz Obrigatório
-              </h3>
-              <p className="text-yellow-800 text-lg mb-6">
-                Para acessar o formulário de inscrição, você deve primeiro completar o Quiz de Segurança respondendo corretamente todas as perguntas.
-              </p>
-              <button
-                onClick={() => {
-                  const element = document.getElementById("quiz");
-                  if (element) {
-                    element.scrollIntoView({ behavior: "smooth" });
-                  }
-                }}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition-all text-lg"
-              >
-                Ir para Quiz
-              </button>
-            </div>
-          ) : (
-            <>
-              <p className="text-gray-600 text-center mb-12 text-lg">
-                Preencha o formulário abaixo para se inscrever. Sua inscrição será confirmada por e-mail.
-              </p>
+          <p className="text-gray-600 text-center mb-12 text-lg">
+            Preencha o formulário abaixo para se inscrever. Sua inscrição será confirmada por e-mail.
+          </p>
 
-              <div className="bg-green-100 border-l-4 border-green-600 rounded-lg p-4 mb-8 flex items-start gap-3">
-                <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-                <p className="text-green-800 font-semibold">
-                  ✓ Quiz de Segurança concluído! Você pode prosseguir com a inscrição.
-                </p>
-              </div>
-
-              {/* Google Forms Iframe */}
-              <div className="bg-gray-50 rounded-xl overflow-hidden shadow-lg">
-                <iframe
-                  src="https://docs.google.com/forms/d/e/1FAIpQLSf_cQxWJ805AbhGmlkEFYgrgxBeXOhqcnmKEfOH79-lU1Q_rg/viewform?embedded=true"
-                  width="100%"
-                  height="1039"
-                  frameBorder="0"
-                  marginHeight={0}
-                  marginWidth={0}
-                  title="Formulário de Inscrição"
-                >
-                  Carregando…
-                </iframe>
-              </div>
-            </>
-          )}
+          {/* Google Forms Iframe */}
+          <div className="bg-gray-50 rounded-xl overflow-hidden shadow-lg">
+            <iframe
+              src="https://docs.google.com/forms/d/e/1FAIpQLSf_cQxWJ805AbhGmlkEFYgrgxBeXOhqcnmKEfOH79-lU1Q_rg/viewform?embedded=true"
+              width="100%"
+              height="1039"
+              frameBorder="0"
+              marginHeight={0}
+              marginWidth={0}
+              title="Formulário de Inscrição"
+            >
+              Carregando…
+            </iframe>
+          </div>
         </div>
       </section>
 
@@ -716,7 +508,6 @@ export default function Index() {
                   { id: "sobre", label: "Sobre" },
                   { id: "programacao", label: "Programação" },
                   { id: "epis", label: "EPIs" },
-                  { id: "quiz", label: "Quiz" },
                 ].map((item) => (
                   <li key={item.id}>
                     <button
